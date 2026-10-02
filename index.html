@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySync Interactive Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #1e3a8a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    .section-title {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-top: 30px;
+    }
+    .question-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .question-title {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .options label {
+      display: block;
+      padding: 8px 12px;
+      margin: 5px 0;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .options label:hover {
+      background: #e2e8f0;
+    }
+    .options input {
+      margin-right: 10px;
+    }
+    .matching-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .matching-table th, .matching-table td {
+      border: 1px solid #cbd5e1;
+      padding: 10px;
+      text-align: left;
+    }
+    .matching-table select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+    }
+    button.submit-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #2563eb;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+    button.submit-btn:hover {
+      background-color: #1d4ed8;
+    }
+    #result-box {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 8px;
+      display: none;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .correct { background-color: #dcfce7 !important; border-color: #22c55e !important; }
+    .incorrect { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h1>StudySync Practice Quiz</h1>
+
+  <!-- PART 1: MULTIPLE CHOICE -->
+  <div class="section-title">Part 1: Multiple Choice Questions</div>
+
+  <!-- Q1 -->
+  <div class="question-card" id="q1-card">
+    <div class="question-title">1. What is <u>most closely</u> the meaning of <b>desert</b> as it is used in paragraph 3?</div>
+    <div class="options">
+      <label><input type="radio" name="q1" value="A"> A. noun | an abandoned area</label>
+      <label><input type="radio" name="q1" value="B"> B. noun | a course of food eaten after a meal, typically consisting of sweets</label>
+      <label><input type="radio" name="q1" value="C"> C. noun | a place that is lacking in water or vegetation</label>
+      <label><input type="radio" name="q1" value="D"> D. noun | what a person deserves or is worthy of</label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-card" id="q2-card">
+    <div class="question-title">2. Which of these inferences about W.E.B. Du Bois is <u>best</u> supported by paragraph 4?</div>
+    <div class="options">
+      <label><input type="radio" name="q2" value="A"> A. Du Bois thinks the most important thing that his daughter can do is work hard.</label>
+      <label><input type="radio" name="q2" value="B"> B. Du Bois thinks the most important thing his daughter can focus on is how to befriend and influence others.</label>
+      <label><input type="radio" name="q2" value="C"> C. Du Bois imagines that his daughter won't write back to him.</label>
+      <label><input type="radio" name="q2" value="D"> D. Du Bois believes that his daughter should try to remain confident and strong.</label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-card" id="q3-card">
+    <div class="question-title">3. With which of the following statements would the author of this letter <u>most likely</u> agree?</div>
+    <div class="options">
+      <label><input type="radio" name="q3" value="A"> A. Every young student should study in a foreign country.</label>
+      <label><input type="radio" name="q3" value="B"> B. A young person should face life’s challenges with courage and determination.</label>
+      <label><input type="radio" name="q3" value="C"> C. It is more important to take risks than to worry about the consequences.</label>
+      <label><input type="radio" name="q3" value="D"> D. One should focus on who they are in the present moment.</label>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-card" id="q4-card">
+    <div class="question-title">4. Which passage from the text <u>best</u> supports your answer to Question 3?</div>
+    <div class="options">
+      <label><input type="radio" name="q4" value="A"> A. “The main thing is the YOU beneath the clothes and skin—the ability to do, the will to conquer, the determination to understand and know this great, wonderful, curious world.”</label>
+      <label><input type="radio" name="q4" value="B"> B. “You, however, must not laugh at yourself. You must know that brown is as pretty as white or prettier...”</label>
+      <label><input type="radio" name="q4" value="C"> C. “Don’t shrink from new experiences and custom. Take the cold bath bravely...”</label>
+      <label><input type="radio" name="q4" value="D"> D. “Make yourself do unpleasant things, so as to gain the upper hand of your soul...”</label>
+    </div>
+  </div>
+
+  <!-- PART 2: MATCHING -->
+  <div class="section-title">Part 2: Vocabulary Matching</div>
+  <div class="question-card">
+    <p>Match each synonym with its correct vocabulary word:</p>
+    <table class="matching-table">
+      <thead>
+        <tr>
+          <th>Synonym</th>
+          <th>Select Vocabulary Word</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>achievement</b></td>
+          <td>
+            <select id="m1">
+              <option value="">-- Choose Word --</option>
+              <option value="crinkley">crinkley</option>
+              <option value="merit">merit</option>
+              <option value="master">master</option>
+              <option value="pine">pine</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><b>long</b></td>
+          <td>
+            <select id="m2">
+              <option value="">-- Choose Word --</option>
+              <option value="crinkley">crinkley</option>
+              <option value="merit">merit</option>
+              <option value="master">master</option>
+              <option value="pine">pine</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><b>overcome</b></td>
+          <td>
+            <select id="m3">
+              <option value="">-- Choose Word --</option>
+              <option value="crinkley">crinkley</option>
+              <option value="merit">merit</option>
+              <option value="master">master</option>
+              <option value="pine">pine</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><b>crimped</b></td>
+          <td>
+            <select id="m4">
+              <option value="">-- Choose Word --</option>
+              <option value="crinkley">crinkley</option>
+              <option value="merit">merit</option>
+              <option value="master">master</option>
+              <option value="pine">pine</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="submit-btn" onclick="checkAnswers()">Submit & Check Score</button>
+
+  <div id="result-box"></div>
+</div>
+
+<script>
+  function checkAnswers() {
+    let score = 0;
+    let total = 8;
+
+    // Correct Answers
+    const answers = {
+      q1: 'D',
+      q2: 'D',
+      q3: 'B',
+      q4: 'A',
+      m1: 'merit',
+      m2: 'pine',
+      m3: 'master',
+      m4: 'crinkley'
+    };
+
+    // Check MCQ 1-4
+    for(let i = 1; i <= 4; i++) {
+      const qCard = document.getElementById(`q${i}-card`);
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(selected && selected.value === answers[`q${i}`]) {
+        score++;
+        qCard.className = "question-card correct";
+      } else {
+        qCard.className = "question-card incorrect";
+      }
+    }
+
+    // Check Matching 1-4
+    for(let i = 1; i <= 4; i++) {
+      const selectElem = document.getElementById(`m${i}`);
+      if(selectElem.value === answers[`m${i}`]) {
+        score++;
+        selectElem.className = "correct";
+      } else {
+        selectElem.className = "incorrect";
+      }
+    }
+
+    // Display Result
+    const resultBox = document.getElementById('result-box');
+    resultBox.style.display = 'block';
+    const percentage = Math.round((score / total) * 100);
+    
+    if(percentage >= 80) {
+      resultBox.style.backgroundColor = '#dcfce7';
+      resultBox.style.color = '#15803d';
+      resultBox.innerHTML = `Great job! Score: ${score}/${total} (${percentage}%)`;
+    } else {
+      resultBox.style.backgroundColor = '#fee2e2';
+      resultBox.style.color = '#b91c1c';
+      resultBox.innerHTML = `Keep practicing! Score: ${score}/${total} (${percentage}%)`;
+    }
+  }
+</script>
+
+</body>
+</html>
