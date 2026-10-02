@@ -1,287 +1,866 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StudySync Interactive Quiz</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f7f9;
-      color: #333;
-      margin: 0;
-      padding: 20px;
-    }
-    .quiz-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #1e3a8a;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 10px;
-    }
-    .section-title {
-      background-color: #1e3a8a;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 6px;
-      margin-top: 30px;
-    }
-    .question-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    .question-title {
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-    .options label {
-      display: block;
-      padding: 8px 12px;
-      margin: 5px 0;
-      background: white;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .options label:hover {
-      background: #e2e8f0;
-    }
-    .options input {
-      margin-right: 10px;
-    }
-    .matching-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    .matching-table th, .matching-table td {
-      border: 1px solid #cbd5e1;
-      padding: 10px;
-      text-align: left;
-    }
-    .matching-table select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 4px;
-      border: 1px solid #cbd5e1;
-    }
-    button.submit-btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      background-color: #2563eb;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 30px;
-    }
-    button.submit-btn:hover {
-      background-color: #1d4ed8;
-    }
-    #result-box {
-      margin-top: 25px;
-      padding: 20px;
-      border-radius: 8px;
-      display: none;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .correct { background-color: #dcfce7 !important; border-color: #22c55e !important; }
-    .incorrect { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 Math Interactive Quiz & Scratchpad</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- MathJax for rendering math LaTeX formulas -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+body {
+font-family: 'Plus Jakarta Sans', sans-serif;
+background-color: #f8fafc;
+}
+.canvas-grid {
+background-size: 20px 20px;
+background-image:
+linear-gradient(to right, rgba(203, 213, 225, 0.4) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(203, 213, 225, 0.4) 1px, transparent 1px);
+}
+.canvas-lined {
+background-size: 100% 28px;
+background-image: linear-gradient(to bottom, transparent 27px, #e2e8f0 1px);
+}
+.canvas-blank {
+background-color: #ffffff;
+}
+/* Custom scrollbars */
+::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+::-webkit-scrollbar-track {
+background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+background: #cbd5e1;
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #94a3b8;
+}
+</style>
 </head>
-<body>
+<body class="h-screen flex flex-col overflow-hidden text-slate-800">
 
-<div class="quiz-container">
-  <h1>StudySync Practice Quiz</h1>
-
-  <!-- PART 1: MULTIPLE CHOICE -->
-  <div class="section-title">Part 1: Multiple Choice Questions</div>
-
-  <!-- Q1 -->
-  <div class="question-card" id="q1-card">
-    <div class="question-title">1. What is <u>most closely</u> the meaning of <b>desert</b> as it is used in paragraph 3?</div>
-    <div class="options">
-      <label><input type="radio" name="q1" value="A"> A. noun | an abandoned area</label>
-      <label><input type="radio" name="q1" value="B"> B. noun | a course of food eaten after a meal, typically consisting of sweets</label>
-      <label><input type="radio" name="q1" value="C"> C. noun | a place that is lacking in water or vegetation</label>
-      <label><input type="radio" name="q1" value="D"> D. noun | what a person deserves or is worthy of</label>
-    </div>
-  </div>
-
-  <!-- Q2 -->
-  <div class="question-card" id="q2-card">
-    <div class="question-title">2. Which of these inferences about W.E.B. Du Bois is <u>best</u> supported by paragraph 4?</div>
-    <div class="options">
-      <label><input type="radio" name="q2" value="A"> A. Du Bois thinks the most important thing that his daughter can do is work hard.</label>
-      <label><input type="radio" name="q2" value="B"> B. Du Bois thinks the most important thing his daughter can focus on is how to befriend and influence others.</label>
-      <label><input type="radio" name="q2" value="C"> C. Du Bois imagines that his daughter won't write back to him.</label>
-      <label><input type="radio" name="q2" value="D"> D. Du Bois believes that his daughter should try to remain confident and strong.</label>
-    </div>
-  </div>
-
-  <!-- Q3 -->
-  <div class="question-card" id="q3-card">
-    <div class="question-title">3. With which of the following statements would the author of this letter <u>most likely</u> agree?</div>
-    <div class="options">
-      <label><input type="radio" name="q3" value="A"> A. Every young student should study in a foreign country.</label>
-      <label><input type="radio" name="q3" value="B"> B. A young person should face life’s challenges with courage and determination.</label>
-      <label><input type="radio" name="q3" value="C"> C. It is more important to take risks than to worry about the consequences.</label>
-      <label><input type="radio" name="q3" value="D"> D. One should focus on who they are in the present moment.</label>
-    </div>
-  </div>
-
-  <!-- Q4 -->
-  <div class="question-card" id="q4-card">
-    <div class="question-title">4. Which passage from the text <u>best</u> supports your answer to Question 3?</div>
-    <div class="options">
-      <label><input type="radio" name="q4" value="A"> A. “The main thing is the YOU beneath the clothes and skin—the ability to do, the will to conquer, the determination to understand and know this great, wonderful, curious world.”</label>
-      <label><input type="radio" name="q4" value="B"> B. “You, however, must not laugh at yourself. You must know that brown is as pretty as white or prettier...”</label>
-      <label><input type="radio" name="q4" value="C"> C. “Don’t shrink from new experiences and custom. Take the cold bath bravely...”</label>
-      <label><input type="radio" name="q4" value="D"> D. “Make yourself do unpleasant things, so as to gain the upper hand of your soul...”</label>
-    </div>
-  </div>
-
-  <!-- PART 2: MATCHING -->
-  <div class="section-title">Part 2: Vocabulary Matching</div>
-  <div class="question-card">
-    <p>Match each synonym with its correct vocabulary word:</p>
-    <table class="matching-table">
-      <thead>
-        <tr>
-          <th>Synonym</th>
-          <th>Select Vocabulary Word</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><b>achievement</b></td>
-          <td>
-            <select id="m1">
-              <option value="">-- Choose Word --</option>
-              <option value="crinkley">crinkley</option>
-              <option value="merit">merit</option>
-              <option value="master">master</option>
-              <option value="pine">pine</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td><b>long</b></td>
-          <td>
-            <select id="m2">
-              <option value="">-- Choose Word --</option>
-              <option value="crinkley">crinkley</option>
-              <option value="merit">merit</option>
-              <option value="master">master</option>
-              <option value="pine">pine</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td><b>overcome</b></td>
-          <td>
-            <select id="m3">
-              <option value="">-- Choose Word --</option>
-              <option value="crinkley">crinkley</option>
-              <option value="merit">merit</option>
-              <option value="master">master</option>
-              <option value="pine">pine</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td><b>crimped</b></td>
-          <td>
-            <select id="m4">
-              <option value="">-- Choose Word --</option>
-              <option value="crinkley">crinkley</option>
-              <option value="merit">merit</option>
-              <option value="master">master</option>
-              <option value="pine">pine</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <button class="submit-btn" onclick="checkAnswers()">Submit & Check Score</button>
-
-  <div id="result-box"></div>
+<!-- HEADER -->
+<header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shrink-0 shadow-sm z-10">
+<div class="flex items-center space-x-3">
+<div class="bg-indigo-600 text-white p-2 rounded-lg shadow-sm">
+<i class="fa-solid fa-calculator text-xl"></i>
+</div>
+<div>
+<h1 class="font-bold text-slate-900 text-lg leading-tight">Unit 2 Math Mastery Test</h1>
+<p class="text-xs text-slate-500 font-medium">Statistics & Decimal Operations (Lessons 2-3 to 2-10)</p>
+</div>
 </div>
 
+<!-- PROGRESS & SCORES -->
+<div class="flex items-center space-x-6">
+<div class="hidden sm:flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600">
+<i class="fa-solid fa-list-check text-indigo-500"></i>
+<span id="question-progress-text">Question 1 / 16</span>
+</div>
+<div class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-bold text-emerald-700">
+<i class="fa-solid fa-trophy text-emerald-500"></i>
+<span id="score-counter">Score: 0 / 16</span>
+</div>
+<button id="reset-all-btn" class="text-xs text-slate-500 hover:text-indigo-600 font-medium flex items-center gap-1 transition">
+<i class="fa-solid fa-rotate-right"></i> Restart
+</button>
+</div>
+</header>
+
+<!-- MAIN APP LAYOUT (Split View) -->
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+
+<!-- LEFT SIDE: QUIZ CONTENT -->
+<div class="w-full md:w-1/2 lg:w-7/12 flex flex-col h-full bg-slate-50 border-r border-slate-200 overflow-y-auto">
+
+<!-- Progress Bar -->
+<div class="w-full bg-slate-200 h-1.5">
+<div id="progress-bar-fill" class="bg-indigo-600 h-1.5 transition-all duration-300" style="width: 6.25%;"></div>
+</div>
+
+<!-- Quiz Card Container -->
+<div class="p-6 md:p-8 flex-1 flex flex-col justify-between max-w-3xl mx-auto w-full">
+
+<div id="quiz-body">
+<!-- Lesson Tag -->
+<div class="flex items-center justify-between mb-4">
+<span id="lesson-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+Lesson 2-3: Summarize Data Using Measures of Center
+</span>
+<span id="question-number-badge" class="text-xs font-bold text-slate-400">
+Q1
+</span>
+</div>
+
+<!-- Question Text -->
+<div id="question-text" class="text-base md:text-lg font-semibold text-slate-800 mb-6 leading-relaxed">
+Loading Question...
+</div>
+
+<!-- Hint Drawer (Hidden by default) -->
+<div id="hint-box" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-sm flex items-start space-x-3">
+<i class="fa-solid fa-lightbulb text-amber-500 text-lg mt-0.5"></i>
+<div>
+<span class="font-bold block mb-0.5">Hint:</span>
+<p id="hint-text">Hint content here...</p>
+</div>
+</div>
+
+<!-- Answer Options -->
+<div id="options-container" class="space-y-3 mb-6">
+<!-- Dynamic Options loaded via JS -->
+</div>
+
+<!-- Explanation Rationale Box (Hidden until submitted) -->
+<div id="explanation-box" class="hidden p-5 rounded-xl border mb-6 text-sm">
+<div class="flex items-center space-x-2 font-bold text-base mb-2" id="explanation-title">
+<!-- Icon + Success/Error Title -->
+</div>
+<p id="explanation-text" class="leading-relaxed text-slate-700"></p>
+</div>
+</div>
+
+<!-- QUIZ ACTION BUTTONS -->
+<div class="pt-4 border-t border-slate-200 flex items-center justify-between mt-auto">
+<button id="hint-btn" class="px-4 py-2 text-xs font-bold text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition flex items-center gap-2">
+<i class="fa-regular fa-lightbulb text-amber-500"></i> Show Hint
+</button>
+
+<div class="flex items-center space-x-3">
+<button id="prev-btn" class="px-4 py-2 text-xs font-bold text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition disabled:opacity-40 disabled:cursor-not-allowed">
+<i class="fa-solid fa-chevron-left mr-1"></i> Prev
+</button>
+<button id="submit-btn" class="px-6 py-2 text-xs font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-md transition disabled:opacity-50">
+Check Answer
+</button>
+<button id="next-btn" class="hidden px-6 py-2 text-xs font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-md transition">
+Next Question <i class="fa-solid fa-chevron-right ml-1"></i>
+</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- RIGHT SIDE: INTERACTIVE SCRATCHPAD / WORKSPACE -->
+<div class="w-full md:w-1/2 lg:w-5/12 flex flex-col h-full bg-white">
+
+<!-- SCRATCHPAD TOOLBAR -->
+<div class="p-3 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-2 shrink-0">
+<div class="flex items-center space-x-2">
+<span class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+<i class="fa-solid fa-pen-scratch text-indigo-600"></i> Scratchpad
+</span>
+
+<!-- Background Mode Selector -->
+<select id="canvas-bg-select" class="text-xs border border-slate-300 rounded-md px-2 py-1 bg-white font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+<option value="grid">Grid Paper</option>
+<option value="lined">Lined Paper</option>
+<option value="blank">Blank White</option>
+</select>
+</div>
+
+<!-- Canvas Action Tools -->
+<div class="flex items-center space-x-1.5">
+<!-- Tool Selectors -->
+<button id="tool-pen" title="Pen Tool" class="p-1.5 rounded-md text-slate-700 bg-indigo-100 text-indigo-700 font-bold hover:bg-indigo-200 transition text-xs flex items-center gap-1 px-2.5">
+<i class="fa-solid fa-pen"></i> Draw
+</button>
+<button id="tool-eraser" title="Eraser Tool" class="p-1.5 rounded-md text-slate-600 hover:bg-slate-200 transition text-xs flex items-center gap-1 px-2.5">
+<i class="fa-solid fa-eraser"></i> Eraser
+</button>
+
+<!-- Color Picker Palette -->
+<div class="flex items-center space-x-1 px-1 border-l border-r border-slate-300">
+<button class="color-btn w-5 h-5 rounded-full bg-slate-900 ring-2 ring-indigo-500 ring-offset-1" data-color="#0f172a"></button>
+<button class="color-btn w-5 h-5 rounded-full bg-blue-600" data-color="#2563eb"></button>
+<button class="color-btn w-5 h-5 rounded-full bg-emerald-600" data-color="#16a34a"></button>
+<button class="color-btn w-5 h-5 rounded-full bg-rose-600" data-color="#e11d48"></button>
+</div>
+
+<!-- Stroke Size -->
+<select id="stroke-size-select" class="text-xs border border-slate-300 rounded-md px-1.5 py-1 bg-white text-slate-700">
+<option value="2">Thin</option>
+<option value="4" selected>Medium</option>
+<option value="8">Thick</option>
+</select>
+
+<!-- Clear Canvas -->
+<button id="clear-canvas-btn" title="Clear Scratchpad" class="p-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-md transition font-semibold px-2">
+<i class="fa-solid fa-trash-can"></i> Clear
+</button>
+</div>
+</div>
+
+<!-- SCRATCHPAD CANVAS AREA -->
+<div class="flex-1 relative overflow-hidden bg-slate-100 cursor-crosshair">
+<canvas id="scratchpad-canvas" class="w-full h-full canvas-grid block"></canvas>
+</div>
+
+<!-- SCRATCHPAD FOOTER NOTE -->
+<div class="px-4 py-2 bg-slate-50 border-t border-slate-200 text-slate-400 text-[11px] flex justify-between items-center shrink-0">
+<span><i class="fa-regular fa-hand-pointer mr-1"></i> Work out calculations, long divisions, or sorting here</span>
+<span id="canvas-status">Drawing mode</span>
+</div>
+
+</div>
+
+</main>
+
+<!-- RESULTS SUMMARY MODAL (Shown at test end) -->
+<div id="results-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-white rounded-2xl max-w-2xl w-full p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[90vh] border border-slate-100">
+<div class="text-center mb-6">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 text-2xl mb-3">
+<i class="fa-solid fa-award"></i>
+</div>
+<h2 class="text-2xl font-bold text-slate-900">Quiz Completed!</h2>
+<p class="text-slate-500 text-sm mt-1">Here is how you performed across Unit 2 Math concepts:</p>
+</div>
+
+<!-- SCORE SCORECARD -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center">
+<span class="block text-xs font-bold uppercase text-indigo-500 tracking-wider">Final Score</span>
+<span id="modal-final-score" class="text-3xl font-black text-indigo-700">0 / 16</span>
+</div>
+<div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-center">
+<span class="block text-xs font-bold uppercase text-emerald-500 tracking-wider">Accuracy</span>
+<span id="modal-accuracy" class="text-3xl font-black text-emerald-700">0%</span>
+</div>
+</div>
+
+<!-- LESSON BREAKDOWN MATRIX -->
+<h3 class="font-bold text-slate-800 text-sm mb-3">Lesson Mastery Breakdown:</h3>
+<div id="lesson-breakdown-list" class="space-y-2 mb-6 text-sm">
+<!-- Loaded dynamically -->
+</div>
+
+<div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
+<button id="modal-review-btn" class="px-5 py-2.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+Review Answers
+</button>
+<button id="modal-restart-btn" class="px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md transition">
+Retake Test
+</button>
+</div>
+</div>
+</div>
+
+
+<!-- JAVASCRIPT LOGIC -->
 <script>
-  function checkAnswers() {
-    let score = 0;
-    let total = 8;
+// QUIZ DATA (16 Questions: 2 for each Lesson from 2-3 to 2-10)
+const quizQuestions = [
+// Lesson 2-3
+{
+lesson: "Lesson 2-3: Describe Data Using Measures of Center",
+question: "Find the median of the following dataset: $14, 18, 21, 25, 28, 32, 40, 42$.",
+options: [
+{ text: "25", isCorrect: false, rationale: "25 is the 4th term, but since there are 8 terms (even), you must average the two middle terms." },
+{ text: "26.5", isCorrect: true, rationale: "Since there are 8 terms, the middle two terms are 25 and 28. Their average is $\\frac{25 + 28}{2} = 26.5$." },
+{ text: "28", isCorrect: false, rationale: "28 is the 5th term. You need the mean of the 4th and 5th terms." },
+{ text: "27", isCorrect: false, rationale: "Incorrect calculation. Add 25 and 28 (= 53) and divide by 2 to get 26.5." }
+],
+hint: "Arrange the numbers in order. Since there is an even number of values (8), find the average of the two middle numbers."
+},
+{
+lesson: "Lesson 2-3: Describe Data Using Measures of Center",
+question: "A student scored $88, 92, 85, 92,$ and $98$ on 5 math quizzes. What are the Median and Mode of this dataset respectively?",
+options: [
+{ text: "Median = 92, Mode = 92", isCorrect: true, rationale: "When ordered ($85, 88, 92, 92, 98$), the middle value (Median) is 92. The most frequent value (Mode) is also 92." },
+{ text: "Median = 91, Mode = 92", isCorrect: false, rationale: "91 is the Mean of the dataset, not the Median." },
+{ text: "Median = 85, Mode = 98", isCorrect: false, rationale: "85 is the Minimum value, and 98 is the Maximum value." },
+{ text: "Median = 92, Mode = 88", isCorrect: false, rationale: "88 only appears once; 92 appears twice, making 92 the Mode." }
+],
+hint: "Order the dataset from least to greatest: 85, 88, 92, 92, 98. Find the middle value for Median and the most repeated value for Mode."
+},
 
-    // Correct Answers
-    const answers = {
-      q1: 'D',
-      q2: 'D',
-      q3: 'B',
-      q4: 'A',
-      m1: 'merit',
-      m2: 'pine',
-      m3: 'master',
-      m4: 'crinkley'
-    };
+// Lesson 2-4
+{
+lesson: "Lesson 2-4: Represent and Describe Data in a Box Plot",
+question: "In a box plot representing student test scores, $Q_1 = 68$, $\\text{Median} = 78$, $Q_3 = 88$, $\\text{Min} = 52$, and $\\text{Max} = 98$. What percentage of students scored between $68$ and $88$?",
+options: [
+{ text: "25%", isCorrect: false, rationale: "25% is the proportion in a single quartile section (e.g., between $Q_1$ and Median)." },
+{ text: "50%", isCorrect: true, rationale: "The box spans from $Q_1$ (68) to $Q_3$ (88), which represents the middle 50% of all data values." },
+{ text: "75%", isCorrect: false, rationale: "75% represents the data below $Q_3$, not between $Q_1$ and $Q_3$." },
+{ text: "33%", isCorrect: false, rationale: "Each section of a box plot represents 25% of data; two sections combined ($Q_1$ to $Q_3$) equal 50%." }
+],
+hint: "The central 'box' in a box plot extends from the First Quartile ($Q_1$) to the Third Quartile ($Q_3$)."
+},
+{
+lesson: "Lesson 2-4: Represent and Describe Data in a Box Plot",
+question: "Consider the ordered dataset: $4, 8, 12, 15, 19, 22, 27, 31$. What is the First Quartile ($Q_1$)?",
+options: [
+{ text: "8", isCorrect: false, rationale: "8 is part of the lower half, but $Q_1$ is the median of the entire lower half." },
+{ text: "10", isCorrect: true, rationale: "The lower half is $4, 8, 12, 15$. The median of this lower half is $\\frac{8 + 12}{2} = 10$." },
+{ text: "12", isCorrect: false, rationale: "12 is the 3rd term; you must average the two middle numbers of the lower half (8 and 12)." },
+{ text: "13.5", isCorrect: false, rationale: "13.5 is the overall Median ($Q_2$), not $Q_1$." }
+],
+hint: "Split the 8 numbers into a lower half (first 4 numbers) and upper half (last 4 numbers). Find the median of the lower half."
+},
 
-    // Check MCQ 1-4
-    for(let i = 1; i <= 4; i++) {
-      const qCard = document.getElementById(`q${i}-card`);
-      const selected = document.querySelector(`input[name="q${i}"]:checked`);
-      if(selected && selected.value === answers[`q${i}`]) {
-        score++;
-        qCard.className = "question-card correct";
-      } else {
-        qCard.className = "question-card incorrect";
-      }
-    }
+// Lesson 2-5
+{
+lesson: "Lesson 2-5: Describe Data by Range and Interquartile Range",
+question: "A dataset has $Q_1 = 45$, $Q_3 = 72$, $\\text{Minimum} = 20$, and $\\text{Maximum} = 95$. What is the Interquartile Range (IQR)?",
+options: [
+{ text: "75", isCorrect: false, rationale: "75 is the overall Range ($\\text{Max} - \\text{Min} = 95 - 20 = 75$)." },
+{ text: "27", isCorrect: true, rationale: "$\\text{IQR} = Q_3 - Q_1 = 72 - 45 = 27$." },
+{ text: "52", isCorrect: false, rationale: "52 is the difference between Maximum and $Q_1$ ($95 - 45$)." },
+{ text: "35", isCorrect: false, rationale: "Incorrect subtraction. Use $Q_3 - Q_1 = 72 - 45$." }
+],
+hint: "Interquartile Range (IQR) measures the spread of the middle 50% and is calculated as $Q_3 - Q_1$."
+},
+{
+lesson: "Lesson 2-5: Describe Data by Range and Interquartile Range",
+question: "If an unusually large maximum value (an outlier) is added to a dataset, which measure will be MOST affected?",
+options: [
+{ text: "Interquartile Range (IQR)", isCorrect: false, rationale: "IQR focuses on $Q_3 - Q_1$ and is resistant to outliers at the extremes." },
+{ text: "Median", isCorrect: false, rationale: "Median depends on order, so adding one extreme value shifts its position by at most half a step." },
+{ text: "Range", isCorrect: true, rationale: "Range = $\\text{Max} - \\text{Min}$. Changing the maximum directly increases the overall Range value dramatically." },
+{ text: "First Quartile ($Q_1$)", isCorrect: false, rationale: "An upper outlier does not affect the lower quartile ($Q_1$)." }
+],
+hint: "Consider which measure directly uses the Maximum value in its formula."
+},
 
-    // Check Matching 1-4
-    for(let i = 1; i <= 4; i++) {
-      const selectElem = document.getElementById(`m${i}`);
-      if(selectElem.value === answers[`m${i}`]) {
-        score++;
-        selectElem.className = "correct";
-      } else {
-        selectElem.className = "incorrect";
-      }
-    }
+// Lesson 2-6
+{
+lesson: "Lesson 2-6: Divide Multi-Digit Numbers & Decimals by Powers of 10",
+question: "What is the quotient of $529.4 \\div 10^3$?",
+options: [
+{ text: "52.94", isCorrect: false, rationale: "This is dividing by $10^1$ (shifting decimal point 1 place left)." },
+{ text: "5.294", isCorrect: false, rationale: "This is dividing by $10^2$ (shifting decimal point 2 places left)." },
+{ text: "0.5294", isCorrect: true, rationale: "Dividing by $10^3$ shifts the decimal point 3 places to the left: $529.4 \\rightarrow 0.5294$." },
+{ text: "0.05294", isCorrect: false, rationale: "This would be dividing by $10^4$ (4 places left)." }
+],
+hint: "Dividing by $10^3$ means moving the decimal point 3 positions to the left."
+},
+{
+lesson: "Lesson 2-6: Divide Multi-Digit Numbers & Decimals by Powers of 10",
+question: "Evaluate: $178.5 \\div 6$.",
+options: [
+{ text: "29.75", isCorrect: true, rationale: "Performing standard division: $178 \\div 6 = 29$ with remainder 4. Bring down .5 $\\rightarrow 45 \\div 6 = 7$ remainder 3. Bring down 0 $\\rightarrow 30 \\div 6 = 5$. Result = 29.75." },
+{ text: "28.55", isCorrect: false, rationale: "Calculation error in division steps." },
+{ text: "29.25", isCorrect: false, rationale: "Incorrect remainder handling. $45 \\div 6 = 7.5$, not $7.25$." },
+{ text: "30.15", isCorrect: false, rationale: "Overestimation error during long division." }
+],
+hint: "Set up long division: $178.5 \\div 6$. Place the decimal point in the quotient directly above the decimal point in 178.5."
+},
 
-    // Display Result
-    const resultBox = document.getElementById('result-box');
-    resultBox.style.display = 'block';
-    const percentage = Math.round((score / total) * 100);
-    
-    if(percentage >= 80) {
-      resultBox.style.backgroundColor = '#dcfce7';
-      resultBox.style.color = '#15803d';
-      resultBox.innerHTML = `Great job! Score: ${score}/${total} (${percentage}%)`;
-    } else {
-      resultBox.style.backgroundColor = '#fee2e2';
-      resultBox.style.color = '#b91c1c';
-      resultBox.innerHTML = `Keep practicing! Score: ${score}/${total} (${percentage}%)`;
-    }
-  }
+// Lesson 2-7
+{
+lesson: "Lesson 2-7: Divide Decimals Using an Algorithm",
+question: "Find the quotient: $18.36 \\div 0.36$.",
+options: [
+{ text: "5.1", isCorrect: false, rationale: "Incorrect decimal position after division." },
+{ text: "51", isCorrect: true, rationale: "Multiply both numbers by 100 to make the divisor a whole number: $1836 \\div 36 = 51$." },
+{ text: "0.51", isCorrect: false, rationale: "Misplaced decimal point by a factor of 100." },
+{ text: "510", isCorrect: false, rationale: "Multiplied quotient by 10 unnecessarily." }
+],
+hint: "Multiply both dividend and divisor by 100 to get whole numbers: $1836 \\div 36$."
+},
+{
+lesson: "Lesson 2-7: Divide Decimals Using an Algorithm",
+question: "Which statement is ALWAYS true when dividing a positive number $N$ by a decimal $d$ where $0 < d < 1$?",
+options: [
+{ text: "The quotient is less than $N$.", isCorrect: false, rationale: "Dividing by a number less than 1 makes the result larger, not smaller." },
+{ text: "The quotient is greater than $N$.", isCorrect: true, rationale: "Since $d < 1$, dividing by $d$ asks how many fractional parts fit into $N$, resulting in a number greater than $N$." },
+{ text: "The quotient is equal to $N$.", isCorrect: false, rationale: "This only occurs when dividing by 1." },
+{ text: "The quotient is negative.", isCorrect: false, rationale: "Dividing two positive numbers always yields a positive quotient." }
+],
+hint: "Think about $10 \\div 0.5 = 20$. Is 20 greater or smaller than 10?"
+},
+
+// Lesson 2-8
+{
+lesson: "Lesson 2-8: Describe Data Using the Mean",
+question: "Sarah wants to achieve a target mean score of $88$ across 5 tests. Her first four test scores are $82, 90, 85,$ and $89$. What score must she earn on her 5th test?",
+options: [
+{ text: "88", isCorrect: false, rationale: "Scoring 88 on the last test would give a mean of $346 + 88 = 434 \\div 5 = 86.8$." },
+{ text: "92", isCorrect: false, rationale: "$346 + 92 = 438 \\div 5 = 87.6$." },
+{ text: "94", isCorrect: true, rationale: "$\\text{Total sum needed} = 88 \\times 5 = 440$. Sum of 4 tests = $82 + 90 + 85 + 89 = 346$. Required score = $440 - 346 = 94$." },
+{ text: "96", isCorrect: false, rationale: "96 would give a mean of 88.4, which is higher than required." }
+],
+hint: "Find the total points needed ($5 \\times 88 = 440$), then subtract the sum of her current four scores."
+},
+{
+lesson: "Lesson 2-8: Describe Data Using the Mean",
+question: "The mean weight of 4 packages is $12\\text{ kg}$. If a 5th package weighing $17\\text{ kg}$ is added, what is the new mean weight of all 5 packages?",
+options: [
+{ text: "12.5 kg", isCorrect: false, rationale: "Underestimates the impact of adding 17 kg." },
+{ text: "13 kg", isCorrect: true, rationale: "$\\text{Initial total weight} = 4 \\times 12 = 48\\text{ kg}$. $\\text{New total} = 48 + 17 = 65\\text{ kg}$. $\\text{New mean} = 65 \\div 5 = 13\\text{ kg}$." },
+{ text: "13.5 kg", isCorrect: false, rationale: "Incorrect division of $65 \\div 5$." },
+{ text: "14 kg", isCorrect: false, rationale: "Calculation error." }
+],
+hint: "First find the total weight of the 4 packages ($4 \\times 12$). Add 17 kg, then divide by 5."
+},
+
+// Lesson 2-9
+{
+lesson: "Lesson 2-9: Describe Data by Mean Absolute Deviation (MAD)",
+question: "Calculate the Mean Absolute Deviation (MAD) for the dataset: $8, 11, 14, 17, 20$.",
+options: [
+{ text: "3.2", isCorrect: false, rationale: "Calculation error in averaging absolute distances." },
+{ text: "3.6", isCorrect: true, rationale: "1) $\\text{Mean} = \\frac{8+11+14+17+20}{5} = 14$.\n2) Absolute deviations: $|8-14|=6, |11-14|=3, |14-14|=0, |17-14|=3, |20-14|=6$.\n3) $\\text{MAD} = \\frac{6+3+0+3+6}{5} = \\frac{18}{5} = 3.6$." },
+{ text: "4.0", isCorrect: false, rationale: "Incorrect sum of absolute deviations." },
+{ text: "18.0", isCorrect: false, rationale: "18 is the sum of absolute deviations; you must divide by the number of data values (5)." }
+],
+hint: "Step 1: Find the Mean (14). Step 2: Find the distance of each number from 14. Step 3: Find the average of those distances."
+},
+{
+lesson: "Lesson 2-9: Describe Data by Mean Absolute Deviation (MAD)",
+question: "Dataset A has a MAD of $1.2$, while Dataset B has a MAD of $5.8$. Which statement is CORRECT?",
+options: [
+{ text: "Dataset B's values are more consistent.", isCorrect: false, rationale: "A higher MAD indicates greater variability and less consistency." },
+{ text: "Dataset A has greater variability.", isCorrect: false, rationale: "Lower MAD means lower variability." },
+{ text: "Dataset A's values are closer to its mean on average.", isCorrect: true, rationale: "MAD measures average distance from the mean; a smaller MAD ($1.2$) means data points are closely clustered around the mean." },
+{ text: "Dataset B has a higher mean than Dataset A.", isCorrect: false, rationale: "MAD measures spread/variability, not the value of the mean itself." }
+],
+hint: "A smaller MAD value means data points lie closer to the mean (less spread)."
+},
+
+// Lesson 2-10
+{
+lesson: "Lesson 2-10: Choose Appropriate Measures",
+question: "A city's house price dataset includes mostly average homes but has two multi-million dollar luxury mansions (outliers). Which measures of center and variability are MOST appropriate?",
+options: [
+{ text: "Mean and Mean Absolute Deviation (MAD)", isCorrect: false, rationale: "Mean and MAD are heavily pulled/distorted by extreme outliers." },
+{ text: "Median and Interquartile Range (IQR)", isCorrect: true, rationale: "When data contains extreme outliers or is skewed, the Median and IQR are resistant and provide the best representation." },
+{ text: "Mean and Range", isCorrect: false, rationale: "Both Mean and Range are strongly distorted by extreme high values." },
+{ text: "Mode and Range", isCorrect: false, rationale: "Mode does not describe central spread, and Range is affected by outliers." }
+],
+hint: "When a dataset is skewed or contains extreme outliers, use measures that are resistant to outliers."
+},
+
+{
+lesson: "Lesson 2-10: Choose Appropriate Measures",
+question: "A quality control engineer measures 100 identical bolts. The distribution of measurements is symmetric with no outliers. Which measures should be chosen?",
+options: [
+{ text: "Mean and Mean Absolute Deviation (MAD)", isCorrect: true, rationale: "For symmetric distributions without outliers, Mean and MAD utilize all data points and provide the most accurate measures." },
+{ text: "Median and Interquartile Range (IQR)", isCorrect: false, rationale: "While acceptable, Median and IQR are preferred primarily when data is skewed or has outliers." },
+{ text: "Mode and Range", isCorrect: false, rationale: "Mode and Range do not give a complete picture of central tendency and spread." },
+{ text: "Median and MAD", isCorrect: false, rationale: "Mixing Median with MAD is inconsistent; pair Mean with MAD for symmetric data." }
+],
+hint: "If data is symmetric and has NO outliers, use the standard non-resistant measures."
+}
+];
+
+// STATE MANAGEMENT
+let currentQuestionIndex = 0;
+let selectedOptionIndex = null;
+let score = 0;
+let userAnswers = new Array(quizQuestions.length).fill(null);
+
+// DOM ELEMENTS
+const lessonBadge = document.getElementById('lesson-badge');
+const questionNumBadge = document.getElementById('question-number-badge');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const hintBtn = document.getElementById('hint-btn');
+const hintBox = document.getElementById('hint-box');
+const hintText = document.getElementById('hint-text');
+const explanationBox = document.getElementById('explanation-box');
+const explanationTitle = document.getElementById('explanation-title');
+const explanationText = document.getElementById('explanation-text');
+const submitBtn = document.getElementById('submit-btn');
+const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
+const progressBarFill = document.getElementById('progress-bar-fill');
+const questionProgressText = document.getElementById('question-progress-text');
+const scoreCounter = document.getElementById('score-counter');
+const resetAllBtn = document.getElementById('reset-all-btn');
+
+// MODAL ELEMENTS
+const resultsModal = document.getElementById('results-modal');
+const modalFinalScore = document.getElementById('modal-final-score');
+const modalAccuracy = document.getElementById('modal-accuracy');
+const lessonBreakdownList = document.getElementById('lesson-breakdown-list');
+const modalReviewBtn = document.getElementById('modal-review-btn');
+const modalRestartBtn = document.getElementById('modal-restart-btn');
+
+// INITIALIZE QUIZ
+function loadQuestion(index) {
+const q = quizQuestions[index];
+selectedOptionIndex = null;
+
+// Update Header & Tags
+lessonBadge.textContent = q.lesson;
+questionNumBadge.textContent = `Q${index + 1} of ${quizQuestions.length}`;
+questionText.innerHTML = q.question;
+hintText.innerHTML = q.hint;
+
+// Reset Drawer States
+hintBox.classList.add('hidden');
+explanationBox.classList.add('hidden');
+submitBtn.classList.remove('hidden');
+nextBtn.classList.add('hidden');
+submitBtn.disabled = true;
+
+// Update Progress Bar
+const progressPct = ((index + 1) / quizQuestions.length) * 100;
+progressBarFill.style.width = `${progressPct}%`;
+questionProgressText.textContent = `Question ${index + 1} / ${quizQuestions.length}`;
+
+// Update Nav Buttons
+prevBtn.disabled = index === 0;
+
+// Render Options
+optionsContainer.innerHTML = '';
+q.options.forEach((opt, optIdx) => {
+const optBtn = document.createElement('button');
+optBtn.className = `w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50 transition flex items-center justify-between text-sm md:text-base font-medium text-slate-700 option-btn`;
+optBtn.dataset.index = optIdx;
+
+const isAlreadyAnswered = userAnswers[index] !== null;
+
+optBtn.innerHTML = `
+<div class="flex items-center space-x-3">
+<span class="w-7 h-7 rounded-full border border-slate-300 flex items-center justify-center font-bold text-xs text-slate-500 opt-indicator">
+${String.fromCharCode(65 + optIdx)}
+</span>
+<span class="opt-text">${opt.text}</span>
+</div>
+<i class="fa-regular fa-circle opt-icon text-slate-300 text-lg"></i>
+`;
+
+if (!isAlreadyAnswered) {
+optBtn.addEventListener('click', () => selectOption(optIdx));
+}
+
+optionsContainer.appendChild(optBtn);
+});
+
+// If already answered, render state
+if (userAnswers[index] !== null) {
+renderAnsweredState(index);
+}
+
+// Render MathJax LaTeX formulas
+if (window.MathJax) {
+MathJax.typesetPromise();
+}
+}
+
+function selectOption(optIdx) {
+if (userAnswers[currentQuestionIndex] !== null) return; // Locked
+
+selectedOptionIndex = optIdx;
+submitBtn.disabled = false;
+
+const allOptions = optionsContainer.querySelectorAll('.option-btn');
+allOptions.forEach((btn, idx) => {
+const indicator = btn.querySelector('.opt-indicator');
+const icon = btn.querySelector('.opt-icon');
+
+if (idx === optIdx) {
+btn.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/50 text-indigo-900 transition flex items-center justify-between text-sm md:text-base font-semibold shadow-sm option-btn";
+indicator.className = "w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs";
+icon.className = "fa-solid fa-circle-check text-indigo-600 text-lg";
+} else {
+btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50 transition flex items-center justify-between text-sm md:text-base font-medium text-slate-700 option-btn";
+indicator.className = "w-7 h-7 rounded-full border border-slate-300 flex items-center justify-center font-bold text-xs text-slate-500";
+icon.className = "fa-regular fa-circle text-slate-300 text-lg";
+}
+});
+}
+
+function checkAnswer() {
+if (selectedOptionIndex === null) return;
+
+const q = quizQuestions[currentQuestionIndex];
+const isCorrect = q.options[selectedOptionIndex].isCorrect;
+
+userAnswers[currentQuestionIndex] = {
+selected: selectedOptionIndex,
+isCorrect: isCorrect
+};
+
+if (isCorrect) {
+score++;
+scoreCounter.textContent = `Score: ${score} / ${quizQuestions.length}`;
+}
+
+renderAnsweredState(currentQuestionIndex);
+}
+
+function renderAnsweredState(qIndex) {
+const q = quizQuestions[qIndex];
+const ans = userAnswers[qIndex];
+const allOptions = optionsContainer.querySelectorAll('.option-btn');
+
+allOptions.forEach((btn, idx) => {
+btn.disabled = true;
+btn.classList.remove('hover:border-indigo-300', 'hover:bg-slate-50', 'cursor-pointer');
+btn.classList.add('cursor-default');
+
+const isThisOptionCorrect = q.options[idx].isCorrect;
+const isSelected = idx === ans.selected;
+
+if (isThisOptionCorrect) {
+btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950 flex items-center justify-between text-sm md:text-base font-semibold option-btn";
+btn.querySelector('.opt-indicator').className = "w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs";
+btn.querySelector('.opt-icon').className = "fa-solid fa-circle-check text-emerald-600 text-lg";
+} else if (isSelected && !isThisOptionCorrect) {
+btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-950 flex items-center justify-between text-sm md:text-base font-semibold option-btn";
+btn.querySelector('.opt-indicator').className = "w-7 h-7 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs";
+btn.querySelector('.opt-icon').className = "fa-solid fa-circle-xmark text-rose-600 text-lg";
+}
+});
+
+// Show Explanation Box
+explanationBox.classList.remove('hidden');
+if (ans.isCorrect) {
+explanationBox.className = "p-5 rounded-xl border border-emerald-200 bg-emerald-50/80 mb-6 text-sm text-emerald-950";
+explanationTitle.className = "flex items-center space-x-2 font-bold text-emerald-800 text-base mb-1";
+explanationTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> <span>Correct!</span>`;
+} else {
+explanationBox.className = "p-5 rounded-xl border border-rose-200 bg-rose-50/80 mb-6 text-sm text-rose-950";
+explanationTitle.className = "flex items-center space-x-2 font-bold text-rose-800 text-base mb-1";
+explanationTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> <span>Incorrect</span>`;
+}
+
+explanationText.innerHTML = q.options[ans.selected].rationale;
+
+// Toggle Buttons
+submitBtn.classList.add('hidden');
+nextBtn.classList.remove('hidden');
+
+if (window.MathJax) {
+MathJax.typesetPromise();
+}
+}
+
+function showResultsModal() {
+modalFinalScore.textContent = `${score} / ${quizQuestions.length}`;
+const pct = Math.round((score / quizQuestions.length) * 100);
+modalAccuracy.textContent = `${pct}%`;
+
+// Group breakdown by lesson
+lessonBreakdownList.innerHTML = '';
+const lessonMap = {};
+
+quizQuestions.forEach((q, idx) => {
+if (!lessonMap[q.lesson]) {
+lessonMap[q.lesson] = { total: 0, correct: 0 };
+}
+lessonMap[q.lesson].total++;
+if (userAnswers[idx] && userAnswers[idx].isCorrect) {
+lessonMap[q.lesson].correct++;
+}
+});
+
+for (const [lessonTitle, data] of Object.entries(lessonMap)) {
+const item = document.createElement('div');
+item.className = "flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200";
+
+const isMastered = data.correct === data.total;
+const badgeClass = isMastered
+? "bg-emerald-100 text-emerald-800 border-emerald-200"
+: "bg-amber-100 text-amber-800 border-amber-200";
+
+item.innerHTML = `
+<span class="font-medium text-slate-700 text-xs">${lessonTitle}</span>
+<span class="px-2.5 py-1 rounded-md text-xs font-bold border ${badgeClass}">
+${data.correct} / ${data.total} Correct
+</span>
+`;
+lessonBreakdownList.appendChild(item);
+}
+
+resultsModal.classList.remove('hidden');
+}
+
+// EVENT LISTENERS
+submitBtn.addEventListener('click', checkAnswer);
+
+nextBtn.addEventListener('click', () => {
+if (currentQuestionIndex < quizQuestions.length - 1) {
+currentQuestionIndex++;
+loadQuestion(currentQuestionIndex);
+} else {
+showResultsModal();
+}
+});
+
+prevBtn.addEventListener('click', () => {
+if (currentQuestionIndex > 0) {
+currentQuestionIndex--;
+loadQuestion(currentQuestionIndex);
+}
+});
+
+hintBtn.addEventListener('click', () => {
+hintBox.classList.toggle('hidden');
+});
+
+resetAllBtn.addEventListener('click', () => {
+if (confirm("Are you sure you want to restart the quiz? All answers will be reset.")) {
+score = 0;
+currentQuestionIndex = 0;
+userAnswers.fill(null);
+scoreCounter.textContent = `Score: 0 / ${quizQuestions.length}`;
+loadQuestion(0);
+}
+});
+
+modalReviewBtn.addEventListener('click', () => {
+resultsModal.classList.add('hidden');
+currentQuestionIndex = 0;
+loadQuestion(0);
+});
+
+modalRestartBtn.addEventListener('click', () => {
+resultsModal.classList.add('hidden');
+score = 0;
+currentQuestionIndex = 0;
+userAnswers.fill(null);
+scoreCounter.textContent = `Score: 0 / ${quizQuestions.length}`;
+loadQuestion(0);
+});
+
+
+// ==========================================
+// CANVAS SCRATCHPAD ENGINE
+// ==========================================
+const canvas = document.getElementById('scratchpad-canvas');
+const ctx = canvas.getContext('2d');
+const toolPenBtn = document.getElementById('tool-pen');
+const toolEraserBtn = document.getElementById('tool-eraser');
+const colorBtns = document.querySelectorAll('.color-btn');
+const strokeSizeSelect = document.getElementById('stroke-size-select');
+const clearCanvasBtn = document.getElementById('clear-canvas-btn');
+const canvasBgSelect = document.getElementById('canvas-bg-select');
+const canvasStatus = document.getElementById('canvas-status');
+
+let isDrawing = false;
+let currentTool = 'pen'; // 'pen' or 'eraser'
+let currentColor = '#0f172a';
+let currentLineWidth = 4;
+
+function resizeCanvas() {
+const rect = canvas.parentElement.getBoundingClientRect();
+// Preserve drawn content on resize
+const tempCanvas = document.createElement('canvas');
+tempCanvas.width = canvas.width;
+tempCanvas.height = canvas.height;
+const tempCtx = tempCanvas.getContext('2d');
+tempCtx.drawImage(canvas, 0, 0);
+
+canvas.width = rect.width;
+canvas.height = rect.height;
+
+ctx.drawImage(tempCanvas, 0, 0);
+ctx.lineCap = 'round';
+ctx.lineJoin = 'round';
+}
+
+window.addEventListener('resize', resizeCanvas);
+setTimeout(resizeCanvas, 100);
+
+function getCanvasCoordinates(e) {
+const rect = canvas.getBoundingClientRect();
+let clientX = e.clientX;
+let clientY = e.clientY;
+
+if (e.touches && e.touches.length > 0) {
+clientX = e.touches[0].clientX;
+clientY = e.touches[0].clientY;
+}
+
+return {
+x: clientX - rect.left,
+y: clientY - rect.top
+};
+}
+
+function startDrawing(e) {
+isDrawing = true;
+const pos = getCanvasCoordinates(e);
+ctx.beginPath();
+ctx.moveTo(pos.x, pos.y);
+}
+
+function draw(e) {
+if (!isDrawing) return;
+e.preventDefault();
+const pos = getCanvasCoordinates(e);
+
+ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+ctx.lineWidth = currentTool === 'eraser' ? currentLineWidth * 4 : currentLineWidth;
+
+ctx.lineTo(pos.x, pos.y);
+ctx.stroke();
+}
+
+function stopDrawing() {
+if (isDrawing) {
+ctx.closePath();
+isDrawing = false;
+}
+}
+
+// Mouse Events
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseleave', stopDrawing);
+
+// Touch Events for Tablets/Mobile
+canvas.addEventListener('touchstart', startDrawing);
+canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchend', stopDrawing);
+
+// Tool Switches
+toolPenBtn.addEventListener('click', () => {
+currentTool = 'pen';
+toolPenBtn.className = "p-1.5 rounded-md text-indigo-700 bg-indigo-100 font-bold text-xs flex items-center gap-1 px-2.5";
+toolEraserBtn.className = "p-1.5 rounded-md text-slate-600 hover:bg-slate-200 text-xs flex items-center gap-1 px-2.5";
+canvasStatus.textContent = "Drawing mode";
+});
+
+toolEraserBtn.addEventListener('click', () => {
+currentTool = 'eraser';
+toolEraserBtn.className = "p-1.5 rounded-md text-rose-700 bg-rose-100 font-bold text-xs flex items-center gap-1 px-2.5";
+toolPenBtn.className = "p-1.5 rounded-md text-slate-600 hover:bg-slate-200 text-xs flex items-center gap-1 px-2.5";
+canvasStatus.textContent = "Eraser mode";
+});
+
+colorBtns.forEach(btn => {
+btn.addEventListener('click', (e) => {
+colorBtns.forEach(b => b.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-1'));
+e.target.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-1');
+currentColor = e.target.dataset.color;
+if (currentTool === 'eraser') toolPenBtn.click();
+});
+});
+
+strokeSizeSelect.addEventListener('change', (e) => {
+currentLineWidth = parseInt(e.target.value);
+});
+
+clearCanvasBtn.addEventListener('click', () => {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+canvasBgSelect.addEventListener('change', (e) => {
+const bgMode = e.target.value;
+canvas.className = `w-full h-full block canvas-${bgMode}`;
+});
+
+// Initialize First Question
+loadQuestion(0);
+
 </script>
-
 </body>
 </html>
